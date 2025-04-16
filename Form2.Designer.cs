@@ -33,12 +33,13 @@
             dataGridView2 = new DataGridView();
             label5 = new Label();
             label6 = new Label();
+            btnSaveToDatabase = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             SuspendLayout();
             // 
             // btnOpenExcel
             // 
-            btnOpenExcel.Location = new Point(599, 420);
+            btnOpenExcel.Location = new Point(662, 419);
             btnOpenExcel.Name = "btnOpenExcel";
             btnOpenExcel.Size = new Size(221, 52);
             btnOpenExcel.TabIndex = 1;
@@ -49,7 +50,7 @@
             // label1
             // 
             label1.Font = new Font("Segoe UI", 15F);
-            label1.Location = new Point(525, 28);
+            label1.Location = new Point(571, 27);
             label1.Name = "label1";
             label1.Size = new Size(424, 36);
             label1.TabIndex = 2;
@@ -61,13 +62,13 @@
             dataGridView2.Location = new Point(376, 82);
             dataGridView2.Name = "dataGridView2";
             dataGridView2.RowHeadersWidth = 51;
-            dataGridView2.Size = new Size(678, 308);
+            dataGridView2.Size = new Size(773, 308);
             dataGridView2.TabIndex = 3;
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(1085, 82);
+            label5.Location = new Point(1241, 82);
             label5.Name = "label5";
             label5.Size = new Size(0, 20);
             label5.TabIndex = 4;
@@ -75,16 +76,27 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(1085, 196);
+            label6.Location = new Point(1241, 196);
             label6.Name = "label6";
             label6.Size = new Size(0, 20);
             label6.TabIndex = 5;
+            // 
+            // btnSaveToDatabase
+            // 
+            btnSaveToDatabase.Location = new Point(662, 487);
+            btnSaveToDatabase.Name = "btnSaveToDatabase";
+            btnSaveToDatabase.Size = new Size(221, 55);
+            btnSaveToDatabase.TabIndex = 6;
+            btnSaveToDatabase.Text = "Veritabanına Kaydet";
+            btnSaveToDatabase.UseVisualStyleBackColor = true;
+            btnSaveToDatabase.Click += btnSaveToDatabase_Click;
             // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1306, 553);
+            ClientSize = new Size(1413, 700);
+            Controls.Add(btnSaveToDatabase);
             Controls.Add(label6);
             Controls.Add(label5);
             Controls.Add(dataGridView2);
@@ -103,5 +115,6 @@
         private DataGridView dataGridView2;
         private Label label5;
         private Label label6;
+        private Button btnSaveToDatabase;
     }
 }

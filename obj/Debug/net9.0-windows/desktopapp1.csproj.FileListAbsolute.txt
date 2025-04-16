@@ -35,3 +35,5 @@ C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\Microsoft.Win32.Sy
 C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\System.Drawing.Common.dll
 C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\System.Private.Windows.Core.dll
 C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\runtimes\win\lib\net9.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\bsstajyer2\abc1\desktopapp1\obj\Debug\net9.0-windows\desktopapp1.sourcelink.json
+C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\Newtonsoft.Json.dll

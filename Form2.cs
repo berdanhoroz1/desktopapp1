@@ -3,6 +3,7 @@ using System.Data;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 
 namespace desktopapp1
@@ -43,10 +44,13 @@ namespace desktopapp1
             dataTable = new DataTable();
 
             dataTable.Columns.Add("Satır", typeof(int));
+            dataTable.Columns.Add("Kişi", typeof(string));
+            dataTable.Columns.Add("İş Detayı", typeof(string));
+            dataTable.Columns.Add("Kod", typeof(string));
             dataTable.Columns.Add("Başlangıç", typeof(string));
             dataTable.Columns.Add("Bitiş", typeof(string));
             dataTable.Columns.Add("Süre", typeof(string));
-            dataTable.Columns.Add("Çakışma", typeof(bool)); 
+            dataTable.Columns.Add("Çakışma", typeof(bool));
         }
 
         private void InitializeDataGridView()
@@ -74,7 +78,7 @@ namespace desktopapp1
                     firstStartTime = DateTime.MaxValue;
                     lastEndTime = DateTime.MinValue;
 
-                    
+
 
                     while (worksheet.Cells[row, 6].Value != null && worksheet.Cells[row, 6].Value.ToString() != "")
                     {
@@ -87,9 +91,17 @@ namespace desktopapp1
                         DateTime endTime = startTime.Add(duration);
                         bool isConflict = false;
 
+                        string person = worksheet.Cells[row, 2].Value.ToString().Trim();
+
+                        string worklog = worksheet.Cells[row, 3].Value.ToString().Trim();
+
+                        string key = worksheet.Cells[row, 4].Value.ToString().Trim();
+
+                        string updatedKey = "https://horozlojistik.atlassian.net/browse/" + key;
+
                         if (previousEndTime > DateTime.MinValue && startTime < previousEndTime)
                         {
-                            conflictMessages.AppendLine($"Çakışma! Satır {row} - Başlangıç zamanı ({startTime:yyyy-MM-dd HH:mm}) önceki görevin bitişinden ({previousEndTime:yyyy-MM-dd HH:mm}) önce.");
+                            conflictMessages.AppendLine($"Çakışma! Satır {row} - Başlangıç zamanı ({startTime:dd-MM-yyyy HH:mm}) önceki görevin bitişinden ({previousEndTime:dd-MM-yyyy HH:mm}) önce.");
                             isConflict = true;
                         }
 
@@ -101,13 +113,16 @@ namespace desktopapp1
                         if (endTime > lastEndTime)
                             lastEndTime = endTime;
 
-                        
+
                         DataRow newRow = dataTable.NewRow();
                         newRow["Satır"] = row;
-                        newRow["Başlangıç"] = startTime.ToString("yyyy-MM-dd HH:mm");
-                        newRow["Bitiş"] = endTime.ToString("yyyy-MM-dd HH:mm");
-                        newRow["Süre"] = durationText;
-                        newRow["Çakışma"] = isConflict; 
+                        newRow["Kişi"] = person;
+                        newRow["İş Detayı"] = worklog;
+                        newRow["Kod"] = updatedKey;
+                        newRow["Başlangıç"] = startTime.ToString("dd-MM-yyyy HH:mm");
+                        newRow["Bitiş"] = endTime.ToString("dd-MM-yyyy HH:mm");
+                        newRow["Süre"] = duration;
+                        newRow["Çakışma"] = isConflict;
 
                         dataTable.Rows.Add(newRow);
                         row++;
@@ -122,8 +137,8 @@ namespace desktopapp1
                     else
                         MessageBox.Show("Çakışma yoktur.");
 
-                    label5.Text = $"İlk Başlangıç Zamanı: \n{firstStartTime:yyyy-MM-dd HH:mm}";
-                    label6.Text = $"Son Bitiş Zamanı: \n{lastEndTime:yyyy-MM-dd HH:mm}";
+                    label5.Text = $"İlk Başlangıç Zamanı: \n{firstStartTime:dd-MM-yyyy HH:mm}";
+                    label6.Text = $"Son Bitiş Zamanı: \n{lastEndTime:dd-MM-yyyy HH:mm}";
                 }
             }
             catch (Exception ex)
@@ -186,7 +201,79 @@ namespace desktopapp1
             }
         }
 
-        
-        
+
+
+        private async void btnSaveToDatabase_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    
+                    var data = new Dictionary<string, object>();
+
+                    
+                    data["userName"] = row["Kişi"].ToString(); 
+                    data["worklog"] = row["İş Detayı"].ToString(); 
+                    data["key"] = row["Kod"].ToString(); 
+
+                    
+                    string durationText = row["Süre"].ToString().Trim();
+                    TimeSpan duration = ParseDuration(durationText);
+                    data["logged"] = duration.ToString(); 
+
+                    
+                    DateTime startDate = DateTime.Parse(row["Başlangıç"].ToString());
+                    DateTime endDate = DateTime.Parse(row["Bitiş"].ToString());
+                    data["startDate"] = startDate.ToString("yyyy-MM-ddTHH:mm:ss"); 
+                    data["endDate"] = endDate.ToString("yyyy-MM-ddTHH:mm:ss"); 
+
+                    
+                    var success = await SendDataToApi(data);
+
+                    if (!success)
+                    {
+                        MessageBox.Show("Veritabanına kaydetme işlemi başarısız oldu.");
+                    }
+                }
+
+                MessageBox.Show("Veriler başarıyla veritabanına kaydedildi.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Bir hata oluştu: " + ex.Message);
+            }
+        }
+
+
+
+
+        private async Task<bool> SendDataToApi(object data)
+        {
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    
+                    string apiUrl = "http://localhost:5085/api/Work/CreateWork";
+
+                    
+                    string json = JsonConvert.SerializeObject(data);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    
+                    var response = await client.PostAsync(apiUrl, content);
+
+                    
+                    return response.IsSuccessStatusCode;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+
     }
 }
