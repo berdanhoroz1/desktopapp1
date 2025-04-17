@@ -83,7 +83,7 @@ namespace desktopapp1
                     while (worksheet.Cells[row, 6].Value != null && worksheet.Cells[row, 6].Value.ToString() != "")
                     {
                         string durationText = worksheet.Cells[row, 5].Value.ToString().Trim();
-                        TimeSpan duration = ParseDuration(durationText);
+                        TimeSpan duration = ParseDuration(durationText);                       
 
                         string startTimeText = worksheet.Cells[row, 6].Value.ToString().Trim();
                         DateTime startTime = ParseStartTime(startTimeText);
@@ -225,8 +225,8 @@ namespace desktopapp1
                     
                     DateTime startDate = DateTime.Parse(row["Başlangıç"].ToString());
                     DateTime endDate = DateTime.Parse(row["Bitiş"].ToString());
-                    data["startDate"] = startDate.ToString("yyyy-MM-ddTHH:mm:ss"); 
-                    data["endDate"] = endDate.ToString("yyyy-MM-ddTHH:mm:ss"); 
+                    data["startDate"] = startDate.ToString("dd-MM-yyyy HH:mm"); 
+                    data["endDate"] = endDate.ToString("dd-MM-yyyy HH:mm"); 
 
                     
                     var success = await SendDataToApi(data);
@@ -259,6 +259,9 @@ namespace desktopapp1
 
                     
                     string json = JsonConvert.SerializeObject(data);
+
+                    
+
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                     
