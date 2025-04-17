@@ -47,10 +47,12 @@ namespace desktopapp1
             dataTable.Columns.Add("Kişi", typeof(string));
             dataTable.Columns.Add("İş Detayı", typeof(string));
             dataTable.Columns.Add("Kod", typeof(string));
-            dataTable.Columns.Add("Başlangıç", typeof(string));
-            dataTable.Columns.Add("Bitiş", typeof(string));
+            dataTable.Columns.Add("Başlangıç", typeof(DateTime));
+            dataTable.Columns.Add("Bitiş", typeof(DateTime));
             dataTable.Columns.Add("Süre", typeof(string));
+            dataTable.Columns.Add("Mola", typeof(string));
             dataTable.Columns.Add("Çakışma", typeof(bool));
+            
         }
 
         private void InitializeDataGridView()
@@ -78,30 +80,27 @@ namespace desktopapp1
                     firstStartTime = DateTime.MaxValue;
                     lastEndTime = DateTime.MinValue;
 
-
+                    Dictionary<string, DateTime> lastEndTimePerPerson = new Dictionary<string, DateTime>(); // kişi-bitiş zamanı
 
                     while (worksheet.Cells[row, 6].Value != null && worksheet.Cells[row, 6].Value.ToString() != "")
                     {
                         string durationText = worksheet.Cells[row, 5].Value.ToString().Trim();
-                        TimeSpan duration = ParseDuration(durationText);                       
+                        TimeSpan duration = ParseDuration(durationText);
 
                         string startTimeText = worksheet.Cells[row, 6].Value.ToString().Trim();
                         DateTime startTime = ParseStartTime(startTimeText);
-
                         DateTime endTime = startTime.Add(duration);
-                        bool isConflict = false;
 
                         string person = worksheet.Cells[row, 2].Value.ToString().Trim();
-
                         string worklog = worksheet.Cells[row, 3].Value.ToString().Trim();
-
                         string key = worksheet.Cells[row, 4].Value.ToString().Trim();
-
                         string updatedKey = "https://horozlojistik.atlassian.net/browse/" + key;
+
+                        bool isConflict = false;
 
                         if (previousEndTime > DateTime.MinValue && startTime < previousEndTime)
                         {
-                            conflictMessages.AppendLine($"Çakışma! Satır {row} - Başlangıç zamanı ({startTime:dd-MM-yyyy HH:mm}) önceki görevin bitişinden ({previousEndTime:dd-MM-yyyy HH:mm}) önce.");
+                            conflictMessages.AppendLine($"Çakışma! Satır {row} - Başlangıç zamanı ({startTime:yyyy-MM-ddTHH:mm:ss}) önceki görevin bitişinden ({previousEndTime:yyyy-MM-ddTHH:mm:ss}) önce.");
                             isConflict = true;
                         }
 
@@ -113,18 +112,34 @@ namespace desktopapp1
                         if (endTime > lastEndTime)
                             lastEndTime = endTime;
 
+                        
+                        TimeSpan breakDuration = TimeSpan.Zero;
+                        if (lastEndTimePerPerson.ContainsKey(person))
+                        {
+                            DateTime lastPersonEnd = lastEndTimePerPerson[person];
+                            if (startTime > lastPersonEnd)
+                            {
+                                breakDuration = startTime - lastPersonEnd;
+                            }
+                        }
+
+                        lastEndTimePerPerson[person] = endTime;
 
                         DataRow newRow = dataTable.NewRow();
                         newRow["Satır"] = row;
                         newRow["Kişi"] = person;
                         newRow["İş Detayı"] = worklog;
                         newRow["Kod"] = updatedKey;
-                        newRow["Başlangıç"] = startTime.ToString("dd-MM-yyyy HH:mm");
-                        newRow["Bitiş"] = endTime.ToString("dd-MM-yyyy HH:mm");
-                        newRow["Süre"] = duration;
-                        newRow["Çakışma"] = isConflict;
+                        newRow["Başlangıç"] = startTime;
+                        newRow["Bitiş"] = endTime;
+                        newRow["Süre"] = durationText;
+                        newRow["Mola"] = breakDuration.TotalMinutes > 0
+                            ? $"{(int)breakDuration.TotalHours}h {(int)breakDuration.Minutes}m"
+                            : "0m";
 
                         dataTable.Rows.Add(newRow);
+                        newRow["Çakışma"] = isConflict;
+                        
                         row++;
                     }
 
@@ -137,8 +152,8 @@ namespace desktopapp1
                     else
                         MessageBox.Show("Çakışma yoktur.");
 
-                    label5.Text = $"İlk Başlangıç Zamanı: \n{firstStartTime:dd-MM-yyyy HH:mm}";
-                    label6.Text = $"Son Bitiş Zamanı: \n{lastEndTime:dd-MM-yyyy HH:mm}";
+                    label5.Text = $"İlk Başlangıç Zamanı: \n{firstStartTime:yyyy-MM-ddTHH:mm:ss}";
+                    label6.Text = $"Son Bitiş Zamanı: \n{lastEndTime:yyyy-MM-ddTHH:mm:ss}";
                 }
             }
             catch (Exception ex)
@@ -146,6 +161,7 @@ namespace desktopapp1
                 MessageBox.Show("Bir hata oluştu: " + ex.Message);
             }
         }
+
 
         private TimeSpan ParseDuration(string durationText)
         {
@@ -207,43 +223,47 @@ namespace desktopapp1
         {
             try
             {
+                bool allSuccess = true; 
+
                 foreach (DataRow row in dataTable.Rows)
                 {
-                    
                     var data = new Dictionary<string, object>();
 
-                    
-                    data["userName"] = row["Kişi"].ToString(); 
-                    data["worklog"] = row["İş Detayı"].ToString(); 
-                    data["key"] = row["Kod"].ToString(); 
+                    data["userName"] = row["Kişi"].ToString();
+                    data["worklog"] = row["İş Detayı"].ToString();
+                    data["key"] = row["Kod"].ToString();
+                    data["logged"] = row["Süre"].ToString();
+                    data["break"] = row["Mola"].ToString();
 
                     
-                    string durationText = row["Süre"].ToString().Trim();
-                    TimeSpan duration = ParseDuration(durationText);
-                    data["logged"] = duration.ToString(); 
+                    data["startDate"] = (DateTime)row["Başlangıç"];
+                    data["endDate"] = (DateTime)row["Bitiş"];
 
-                    
-                    DateTime startDate = DateTime.Parse(row["Başlangıç"].ToString());
-                    DateTime endDate = DateTime.Parse(row["Bitiş"].ToString());
-                    data["startDate"] = startDate.ToString("dd-MM-yyyy HH:mm"); 
-                    data["endDate"] = endDate.ToString("dd-MM-yyyy HH:mm"); 
+                    data["conflict"] = (bool)row["Çakışma"];
 
-                    
+
                     var success = await SendDataToApi(data);
 
                     if (!success)
                     {
+                        allSuccess = false; 
                         MessageBox.Show("Veritabanına kaydetme işlemi başarısız oldu.");
+                        break; 
                     }
                 }
 
-                MessageBox.Show("Veriler başarıyla veritabanına kaydedildi.");
+                
+                if (allSuccess)
+                {
+                    MessageBox.Show("Veriler başarıyla veritabanına kaydedildi.");
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Bir hata oluştu: " + ex.Message);
             }
         }
+
 
 
 
