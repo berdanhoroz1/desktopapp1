@@ -37,3 +37,11 @@ C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\System.Private.Win
 C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\runtimes\win\lib\net9.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\bsstajyer2\abc1\desktopapp1\obj\Debug\net9.0-windows\desktopapp1.sourcelink.json
 C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\Newtonsoft.Json.dll
+C:\Users\bsstajyer2\abc1\desktopapp1\obj\Debug\net9.0-windows\desktopapp1.Form3.resources
+C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\ClosedXML.dll
+C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\ClosedXML.Parser.dll
+C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\DocumentFormat.OpenXml.dll
+C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\DocumentFormat.OpenXml.Framework.dll
+C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\ExcelNumberFormat.dll
+C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\RBush.dll
+C:\Users\bsstajyer2\abc1\desktopapp1\bin\Debug\net9.0-windows\SixLabors.Fonts.dll

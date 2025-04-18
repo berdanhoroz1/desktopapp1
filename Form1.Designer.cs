@@ -60,7 +60,7 @@
             toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(1448, 27);
+            toolStrip1.Size = new Size(1601, 27);
             toolStrip1.TabIndex = 2;
             toolStrip1.Text = "toolStrip1";
             // 
@@ -90,8 +90,9 @@
             toolStripButton3.Image = (Image)resources.GetObject("toolStripButton3.Image");
             toolStripButton3.ImageTransparentColor = Color.Magenta;
             toolStripButton3.Name = "toolStripButton3";
-            toolStripButton3.Size = new Size(59, 24);
-            toolStripButton3.Text = "Yardım";
+            toolStripButton3.Size = new Size(80, 24);
+            toolStripButton3.Text = "Veritabanı";
+            toolStripButton3.Click += toolStripButton3_Click;
             // 
             // label1
             // 
@@ -116,7 +117,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1448, 821);
+            ClientSize = new Size(1601, 956);
             Controls.Add(pictureBox1);
             Controls.Add(label1);
             Controls.Add(toolStrip1);

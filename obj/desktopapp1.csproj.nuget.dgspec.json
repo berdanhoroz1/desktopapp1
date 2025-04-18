@@ -50,6 +50,10 @@
         "net9.0-windows7.0": {
           "targetAlias": "net9.0-windows",
           "dependencies": {
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.104.2, )"
+            },
             "EPPlus": {
               "target": "Package",
               "version": "[7.7.0, )"
