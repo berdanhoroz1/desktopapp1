@@ -60,6 +60,11 @@ namespace desktopapp1
             dataGridView2.AutoGenerateColumns = true;
             dataGridView2.DataSource = dataTable;
 
+            dataGridView2.ReadOnly = true;
+
+            dataGridView2.AllowUserToAddRows = false;
+            dataGridView2.AllowUserToDeleteRows = false;
+
 
         }
 
@@ -126,7 +131,7 @@ namespace desktopapp1
                         lastEndTimePerPerson[person] = endTime;
 
                         DataRow newRow = dataTable.NewRow();
-                        newRow["Satır"] = row;
+                        newRow["Satır"] = row-2;
                         newRow["Kişi"] = person;
                         newRow["İş Detayı"] = worklog;
                         newRow["Kod"] = updatedKey;
@@ -146,6 +151,8 @@ namespace desktopapp1
                     dataGridView2.DataSource = null;
                     dataGridView2.DataSource = dataTable;
                     dataGridView2.Refresh();
+
+                    dataGridView2.ReadOnly = true;
 
                     if (conflictMessages.Length > 0)
                         MessageBox.Show(conflictMessages.ToString());

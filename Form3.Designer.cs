@@ -36,26 +36,29 @@
             btnDelete = new Button();
             dataGridView1 = new DataGridView();
             btnExportToExcel = new Button();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // txtUserName
             // 
-            txtUserName.Location = new Point(478, 36);
+            txtUserName.Location = new Point(501, 66);
             txtUserName.Name = "txtUserName";
             txtUserName.Size = new Size(209, 27);
             txtUserName.TabIndex = 0;
             // 
             // dtStart
             // 
-            dtStart.Location = new Point(829, 36);
+            dtStart.Location = new Point(802, 66);
             dtStart.Name = "dtStart";
             dtStart.Size = new Size(250, 27);
             dtStart.TabIndex = 1;
             // 
             // dtEnd
             // 
-            dtEnd.Location = new Point(1162, 36);
+            dtEnd.Location = new Point(1117, 66);
             dtEnd.Name = "dtEnd";
             dtEnd.Size = new Size(250, 27);
             dtEnd.TabIndex = 2;
@@ -75,7 +78,7 @@
             btnGetAll.Name = "btnGetAll";
             btnGetAll.Size = new Size(118, 29);
             btnGetAll.TabIndex = 4;
-            btnGetAll.Text = "Hepsini Yazdır";
+            btnGetAll.Text = "Tümünü Getir";
             btnGetAll.UseVisualStyleBackColor = true;
             // 
             // btnDelete
@@ -98,7 +101,7 @@
             // 
             // btnExportToExcel
             // 
-            btnExportToExcel.Location = new Point(1099, 129);
+            btnExportToExcel.Location = new Point(1086, 129);
             btnExportToExcel.Name = "btnExportToExcel";
             btnExportToExcel.Size = new Size(123, 29);
             btnExportToExcel.TabIndex = 7;
@@ -106,11 +109,41 @@
             btnExportToExcel.UseVisualStyleBackColor = true;
             btnExportToExcel.Click += btnExportToExcel_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(501, 36);
+            label1.Name = "label1";
+            label1.Size = new Size(35, 20);
+            label1.TabIndex = 8;
+            label1.Text = "Kişi:";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(802, 37);
+            label2.Name = "label2";
+            label2.Size = new Size(114, 20);
+            label2.TabIndex = 9;
+            label2.Text = "Başlangıç Tarihi:";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(1117, 37);
+            label3.Name = "label3";
+            label3.Size = new Size(79, 20);
+            label3.TabIndex = 10;
+            label3.Text = "Bitiş Tarihi:";
+            // 
             // Form3
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1731, 862);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
             Controls.Add(btnExportToExcel);
             Controls.Add(dataGridView1);
             Controls.Add(btnDelete);
@@ -136,5 +169,8 @@
         private Button btnDelete;
         private DataGridView dataGridView1;
         private Button btnExportToExcel;
+        private Label label1;
+        private Label label2;
+        private Label label3;
     }
 }

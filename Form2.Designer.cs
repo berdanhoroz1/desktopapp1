@@ -39,7 +39,7 @@
             // 
             // btnOpenExcel
             // 
-            btnOpenExcel.Location = new Point(699, 543);
+            btnOpenExcel.Location = new Point(843, 527);
             btnOpenExcel.Name = "btnOpenExcel";
             btnOpenExcel.Size = new Size(221, 52);
             btnOpenExcel.TabIndex = 1;
@@ -50,7 +50,7 @@
             // label1
             // 
             label1.Font = new Font("Segoe UI", 15F);
-            label1.Location = new Point(610, 27);
+            label1.Location = new Point(759, 27);
             label1.Name = "label1";
             label1.Size = new Size(424, 36);
             label1.TabIndex = 2;
@@ -62,13 +62,13 @@
             dataGridView2.Location = new Point(366, 66);
             dataGridView2.Name = "dataGridView2";
             dataGridView2.RowHeadersWidth = 51;
-            dataGridView2.Size = new Size(894, 440);
+            dataGridView2.Size = new Size(1211, 440);
             dataGridView2.TabIndex = 3;
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(1373, 95);
+            label5.Location = new Point(1612, 94);
             label5.Name = "label5";
             label5.Size = new Size(0, 20);
             label5.TabIndex = 4;
@@ -76,14 +76,14 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(1373, 209);
+            label6.Location = new Point(1612, 208);
             label6.Name = "label6";
             label6.Size = new Size(0, 20);
             label6.TabIndex = 5;
             // 
             // btnSaveToDatabase
             // 
-            btnSaveToDatabase.Location = new Point(699, 611);
+            btnSaveToDatabase.Location = new Point(843, 595);
             btnSaveToDatabase.Name = "btnSaveToDatabase";
             btnSaveToDatabase.Size = new Size(221, 55);
             btnSaveToDatabase.TabIndex = 6;
@@ -95,7 +95,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1575, 783);
+            ClientSize = new Size(1823, 783);
             Controls.Add(btnSaveToDatabase);
             Controls.Add(label6);
             Controls.Add(label5);

@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using ClosedXML.Excel;
 using System.IO;
 
-
 namespace desktopapp1
 {
     public partial class Form3 : Form
@@ -23,6 +22,9 @@ namespace desktopapp1
             btnFilter.Click += btnFilter_Click;
             btnGetAll.Click += btnGetAll_Click;
             btnDelete.Click += btnDelete_Click;
+            btnExportToExcel.Click += btnExportToExcel_Click;
+
+            dataGridView1.CellFormatting += dataGridView1_CellFormatting;
         }
 
         private async void btnGetAll_Click(object sender, EventArgs e)
@@ -63,7 +65,6 @@ namespace desktopapp1
             }
         }
 
-
         private async Task LoadAllWorks()
         {
             using (var client = new HttpClient())
@@ -75,6 +76,15 @@ namespace desktopapp1
                     workList = JsonConvert.DeserializeObject<List<WorkModel>>(json);
                     dataGridView1.DataSource = workList;
 
+                    SetDataGridViewReadOnly();
+                    AddRowNumberColumn();
+
+                    
+                    for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                    {
+                        dataGridView1.Rows[i].Cells["no"].Value = (i + 1).ToString(); 
+                    }
+
                     ChangeColumnHeaders();
                 }
             }
@@ -84,7 +94,6 @@ namespace desktopapp1
         {
             using (var client = new HttpClient())
             {
-
                 var queryParams = new List<string>();
 
                 if (!string.IsNullOrEmpty(txtUserName.Text))
@@ -109,6 +118,15 @@ namespace desktopapp1
                     string result = await response.Content.ReadAsStringAsync();
                     workList = JsonConvert.DeserializeObject<List<WorkModel>>(result);
                     dataGridView1.DataSource = workList;
+
+                    SetDataGridViewReadOnly();
+                    AddRowNumberColumn();
+
+                    
+                    for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                    {
+                        dataGridView1.Rows[i].Cells["no"].Value = (i + 1).ToString(); 
+                    }
                 }
                 else
                 {
@@ -117,14 +135,11 @@ namespace desktopapp1
             }
         }
 
-
         private async Task<bool> DeleteWork(int id)
         {
             using (var client = new HttpClient())
             {
-
                 var response = await client.DeleteAsync($"http://localhost:5085/api/Work/DeleteWork/{id}");
-
                 return response.IsSuccessStatusCode;
             }
         }
@@ -179,7 +194,7 @@ namespace desktopapp1
 
         private void ChangeColumnHeaders()
         {
-            
+            dataGridView1.Columns["no"].HeaderText = "Sıra"; 
             dataGridView1.Columns["id"].HeaderText = "id";
             dataGridView1.Columns["userName"].HeaderText = "Kişi";
             dataGridView1.Columns["worklog"].HeaderText = "İş Detayı";
@@ -189,10 +204,40 @@ namespace desktopapp1
             dataGridView1.Columns["logged"].HeaderText = "Süre";
             dataGridView1.Columns["break"].HeaderText = "Mola";
             dataGridView1.Columns["conflict"].HeaderText = "Çakışma";
-
         }
 
+        private void AddRowNumberColumn()
+        {
+            if (!dataGridView1.Columns.Contains("no"))
+            {
+                
+                DataGridViewTextBoxColumn rowNumberColumn = new DataGridViewTextBoxColumn();
+                rowNumberColumn.Name = "no";
+                rowNumberColumn.HeaderText = "Sıra"; 
+                rowNumberColumn.ReadOnly = true; 
+                dataGridView1.Columns.Insert(0, rowNumberColumn);
+            }
+        }
 
+        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            
+            if (e.RowIndex >= 0 && e.ColumnIndex == 0) 
+            {
+                e.Value = e.RowIndex + 1;
+            }
+        }
+
+        // DataGridView'in tüm kolonlarını ve satırlarını readonly yapar
+        private void SetDataGridViewReadOnly()
+        {
+            // DataGridView'in tümünü readonly yap
+            dataGridView1.ReadOnly = true;
+
+            // Kullanıcının yeni satır eklemesine veya mevcut satırları silmesine izin verme
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+        }
 
     }
 }
