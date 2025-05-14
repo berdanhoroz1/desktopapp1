@@ -163,13 +163,13 @@ namespace desktopapp1
                 {
                     var worksheet = workbook.Worksheets.Add("Works");
 
-                    // Kolon başlıkları
+                    
                     for (int col = 0; col < dataGridView1.Columns.Count; col++)
                     {
                         worksheet.Cell(1, col + 1).Value = dataGridView1.Columns[col].HeaderText;
                     }
 
-                    // Satır verileri
+                    
                     for (int row = 0; row < dataGridView1.Rows.Count; row++)
                     {
                         for (int col = 0; col < dataGridView1.Columns.Count; col++)
@@ -228,13 +228,13 @@ namespace desktopapp1
             }
         }
 
-        // DataGridView'in tüm kolonlarını ve satırlarını readonly yapar
+        
         private void SetDataGridViewReadOnly()
         {
-            // DataGridView'in tümünü readonly yap
+            
             dataGridView1.ReadOnly = true;
 
-            // Kullanıcının yeni satır eklemesine veya mevcut satırları silmesine izin verme
+            
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
         }
